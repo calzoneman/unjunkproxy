@@ -18,6 +18,8 @@ func main() {
 	mux.HandleFunc("/media.discordapp.net/", HandleDiscordLink)
 	mux.HandleFunc("/images-ext-1.discordapp.net/", HandleDiscordLink)
 	mux.HandleFunc("/images-ext-2.discordapp.net/", HandleDiscordLink)
+	mux.HandleFunc("/imgur.com/a/", HandleImgurAlbum)
+	mux.HandleFunc("/imgur.com/", HandleImgurSingle)
 
 	srv := &http.Server{
 		Addr:    *addr,
