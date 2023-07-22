@@ -1,8 +1,8 @@
 #!/bin/bash
 
 case "$1" in
-    *i.redd.it*|*cdn.discordapp.com*|*media.discordapp.net*|*images-ext-?.discordapp.net*)
-        url=$(sed 's_https://_http://localhost:8767/_' <<< "$1")
+    *i.redd.it*|*cdn.discordapp.com*|*media.discordapp.net*|*images-ext-?.discordapp.net*|*/imgur.com*)
+        url=$(sed 's_https://\|http://_http://localhost:8767/_' <<< "$1")
         exec firefox "$url"
         ;;
     http:*|https:*)
