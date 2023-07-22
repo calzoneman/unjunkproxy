@@ -10,8 +10,8 @@ import (
 	"regexp"
 )
 
-var reImgurAlbum = regexp.MustCompile(`imgur.com/a/(.+)`)
-var reImgurSingle = regexp.MustCompile(`imgur.com/(.+)`)
+var reImgurAlbum = regexp.MustCompile(`imgur.com/a/([a-zA-Z0-9]+)`)
+var reImgurSingle = regexp.MustCompile(`imgur.com/([a-zA-Z90-9]+)`)
 
 var imgurAlbumPage = template.Must(template.New("imgur_album").Parse(`
 <!doctype html>
