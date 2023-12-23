@@ -80,12 +80,13 @@ func HandleImgurSingle(w http.ResponseWriter, r *http.Request) {
 	}
 	defer pres.Body.Close()
 
-	w.WriteHeader(pres.StatusCode)
 	for k, vs := range pres.Header {
 		for _, v := range vs {
 			w.Header().Add(k, v)
 		}
 	}
+
+	w.WriteHeader(pres.StatusCode)
 
 	_, err = io.Copy(w, pres.Body)
 	if err != nil {
@@ -129,6 +130,7 @@ func HandleImgurAlbum(w http.ResponseWriter, r *http.Request) {
 		do500(w)
 	}
 
+	w.Header().Add("Content-Type", "text/html")
 	w.WriteHeader(http.StatusOK)
 	err = imgurAlbumPage.Execute(w, &album)
 	if err != nil {

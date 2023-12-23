@@ -38,12 +38,13 @@ func HandleRedditImage(w http.ResponseWriter, r *http.Request) {
 	}
 	defer pres.Body.Close()
 
-	w.WriteHeader(pres.StatusCode)
 	for k, vs := range pres.Header {
 		for _, v := range vs {
 			w.Header().Add(k, v)
 		}
 	}
+
+	w.WriteHeader(pres.StatusCode)
 
 	_, err = io.Copy(w, pres.Body)
 	if err != nil {

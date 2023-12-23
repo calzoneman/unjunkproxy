@@ -37,7 +37,6 @@ func HandleDiscordLink(w http.ResponseWriter, r *http.Request) {
 	}
 	defer pres.Body.Close()
 
-	w.WriteHeader(pres.StatusCode)
 	for k, vs := range pres.Header {
 		if strings.ToLower(k) == "content-disposition" {
 			continue
@@ -46,6 +45,8 @@ func HandleDiscordLink(w http.ResponseWriter, r *http.Request) {
 			w.Header().Add(k, v)
 		}
 	}
+
+	w.WriteHeader(pres.StatusCode)
 
 	_, err = io.Copy(w, pres.Body)
 	if err != nil {
