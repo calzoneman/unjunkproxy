@@ -20,13 +20,15 @@ func HandleDiscordLink(w http.ResponseWriter, r *http.Request) {
 	}
 
 	targetURL := fmt.Sprintf("https://%s", targetPath)
-	log.Printf("proxying discord link %s", targetURL)
+	log.Printf("proxying discord link %s?%s", targetURL, r.URL.RawQuery)
 	preq, err := http.NewRequest("GET", targetURL, nil)
 	if err != nil {
 		log.Printf("error creating request: %w", err)
 		do500(w)
 		return
 	}
+
+	preq.URL.RawQuery = r.URL.RawQuery
 
 	client := &http.Client{}
 	pres, err := client.Do(preq)
