@@ -10,7 +10,7 @@ import (
 	"regexp"
 )
 
-var reImgurAlbum = regexp.MustCompile(`imgur.com/a/([a-zA-Z0-9]+)`)
+var reImgurAlbum = regexp.MustCompile(`imgur.com/(?:a|gallery)/([a-zA-Z0-9]+)`)
 var reImgurSingle = regexp.MustCompile(`imgur.com/([a-zA-Z90-9]+)`)
 
 var imgurAlbumPage = template.Must(template.New("imgur_album").Parse(`
@@ -65,6 +65,8 @@ func HandleImgurSingle(w http.ResponseWriter, r *http.Request) {
 	log.Printf("proxying imgur image %s", targetURL)
 	preq, err := http.NewRequest("GET", targetURL, nil)
 	preq.Header.Set("User-Agent", r.Header.Get("User-Agent"))
+	// fuck OFF
+	preq.Header.Set("Accept", "image/*")
 	if err != nil {
 		log.Printf("error creating request: %w", err)
 		do500(w)
