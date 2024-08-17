@@ -11,7 +11,7 @@ import (
 )
 
 var reImgurAlbum = regexp.MustCompile(`imgur.com/(?:a|gallery)/([a-zA-Z0-9]+)`)
-var reImgurSingle = regexp.MustCompile(`imgur.com/([a-zA-Z90-9]+)`)
+var reImgurSingle = regexp.MustCompile(`imgur.com/([a-zA-Z90-9]+)(\.[a-z0-9]+)?`)
 
 var imgurAlbumPage = template.Must(template.New("imgur_album").Parse(`
 <!doctype html>
@@ -61,12 +61,17 @@ func HandleImgurSingle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	targetURL := fmt.Sprintf("https://i.imgur.com/%s.png", match[1])
+	ext := ".png"
+	if len(match) > 2 {
+		ext = match[2]
+	}
+
+	targetURL := fmt.Sprintf("https://i.imgur.com/%s%s", match[1], ext)
 	log.Printf("proxying imgur image %s", targetURL)
 	preq, err := http.NewRequest("GET", targetURL, nil)
 	preq.Header.Set("User-Agent", r.Header.Get("User-Agent"))
 	// fuck OFF
-	preq.Header.Set("Accept", "image/*")
+	preq.Header.Set("Accept", "image/*, video/*")
 	if err != nil {
 		log.Printf("error creating request: %w", err)
 		do500(w)
